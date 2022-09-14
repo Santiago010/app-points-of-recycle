@@ -22,6 +22,7 @@ const MapScreen = () => {
   return (
     <View style={styles.containerPrincipal}>
       <Text style={styles.title}>Escoge una localidad</Text>
+
       <ListLocalities />
     </View>
   );

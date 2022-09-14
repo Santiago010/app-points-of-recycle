@@ -11,6 +11,7 @@ const Map = ({markets}: Props) => {
   return (
     <>
       <MapView
+        showsUserLocation
         style={{flex: 1}}
         initialRegion={{
           latitude: 4.713289713579493,

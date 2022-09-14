@@ -1,14 +1,16 @@
 import {StackScreenProps} from '@react-navigation/stack';
 import React from 'react';
-import {Text, View, StyleSheet} from 'react-native';
+import {Text, View, StyleSheet, TouchableOpacity, Image} from 'react-native';
 import {RootStackParams} from '../navigator/StackNavigator';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {PalleteColors} from '../themes/PaletteColors';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import ButtonBack from '../components/ButtonBack';
 
 interface Props extends StackScreenProps<RootStackParams, 'DetailsPoint'> {}
 
-const DetailsPointsScreen = ({route}: Props) => {
+const DetailsPointsScreen = ({route, navigation}: Props) => {
+  const {top} = useSafeAreaInsets();
   const point = {
     nombre: route.params.Nombre,
     web: route.params.web,
@@ -18,44 +20,59 @@ const DetailsPointsScreen = ({route}: Props) => {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.buttonBack}>
-        <Icon name="arrow-undo-outline" size={30} />
-      </TouchableOpacity>
-      <Text style={styles.textInfo}>Información</Text>
-      <View style={styles.containerSecundary}>
-        <View style={styles.containersIconAndText}>
+      <View style={styles.containerHeader}>
+        <ButtonBack />
+        {/* <TouchableOpacity
+          style={{...styles.btnBack, top: top + 10}}
+          activeOpacity={0.8}
+          onPress={() => navigation.pop()}>
+          <Icon size={30} name="arrow-undo-outline" />
+        </TouchableOpacity> */}
+        <Text style={{...styles.titleName, top: top + 60}}>{point.nombre}</Text>
+        <Image
+          source={require('../assets/location.png')}
+          style={styles.imagePoint}
+        />
+      </View>
+      <View style={styles.containerInfo}>
+        <View style={styles.containerTextAndIco}>
           <Icon
-            size={21}
+            name="globe-outline"
+            size={20}
             color={PalleteColors.primaryDark}
-            name="flower-outline"></Icon>
-          <Text style={styles.text}>{point.nombre}</Text>
+          />
+          {point.web ? (
+            <Text style={styles.info}>{point.web}</Text>
+          ) : (
+            <Text style={styles.info}>¡Ups! NO hay página web</Text>
+          )}
         </View>
-        <View style={styles.containersIconAndText}>
+        <View style={styles.containerTextAndIco}>
           <Icon
-            size={21}
+            name="map-outline"
+            size={20}
             color={PalleteColors.primaryDark}
-            name="flower-outline"></Icon>
-          <Text style={styles.text}>{point.direccion}</Text>
+          />
+          {point.direccion ? (
+            <Text style={styles.info}>{point.direccion}</Text>
+          ) : (
+            <Text>¡Ups! NO hay dirección</Text>
+          )}
         </View>
-        <View style={styles.containersIconAndText}>
+        <View style={styles.containerTextAndIco}>
           <Icon
-            size={21}
+            name="call-outline"
+            size={20}
             color={PalleteColors.primaryDark}
-            name="flower-outline"></Icon>
-
-          <Text style={styles.text}>{point.telefono}</Text>
+          />
+          {point.telefono ? (
+            <Text style={styles.info}>{point.telefono}</Text>
+          ) : (
+            <Text style={styles.info}>¡Ups! NO hay Telefono</Text>
+          )}
         </View>
-        <View style={styles.containersIconAndText}>
-          <Icon
-            size={21}
-            color={PalleteColors.primaryDark}
-            name="flower-outline"></Icon>
-
-          <Text style={styles.text}>{point.web}</Text>
-        </View>
-        <TouchableOpacity style={styles.buttonGO}>
-          <Icon name="navigate-outline" />
-          <Text>Ir</Text>
+        <TouchableOpacity style={styles.btnGo} activeOpacity={0.8}>
+          <Text style={styles.textBtnGo}>Ver Ruta</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -66,52 +83,60 @@ export default DetailsPointsScreen;
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: PalleteColors.primaryLight,
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: PalleteColors.primaryLight,
   },
-  containersIconAndText: {
-    flexDirection: 'row',
+  containerHeader: {
+    zIndex: 999,
+    alignItems: 'center',
+    backgroundColor: PalleteColors.primaryDark,
+    height: 350,
+    borderBottomRightRadius: 250,
+    borderBottomLeftRadius: 250,
+  },
+  btnBack: {
+    position: 'absolute',
+    left: 15,
+    padding: 10,
+    backgroundColor: 'rgba(0,0,0,0.3)',
+    borderRadius: 100,
+    borderColor: 'rgba(0,0,0,0.5)',
+    borderWidth: 1,
     alignItems: 'center',
   },
-  containerSecundary: {
-    padding: 15,
-    width: '70%',
-    height: '50%',
+  titleName: {
+    color: PalleteColors.primaryLight,
+    fontSize: 20,
+  },
+  imagePoint: {
+    top: 65,
+    width: 200,
+    height: 200,
+  },
+  containerInfo: {
+    flex: 1,
+    marginHorizontal: 15,
+    marginVertical: 15,
     justifyContent: 'space-between',
-    backgroundColor: PalleteColors.secundaryLight,
-    borderRadius: 5,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 3,
-    },
-    shadowOpacity: 0.29,
-    shadowRadius: 4.65,
-
-    elevation: 7,
   },
-  buttonGO: {
-    justifyContent: 'center',
+  containerTextAndIco: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: PalleteColors.secundaryLight,
-    borderColor: PalleteColors.primaryDark,
-    borderWidth: 2,
-    borderRadius: 5,
-    paddingVertical: 10,
-    paddingHorizontal: 15,
   },
-  text: {
+  btnGo: {
+    backgroundColor: PalleteColors.primaryDark,
+    borderRadius: 100,
+    alignItems: 'center',
+    padding: 15,
+    marginTop: 15,
+  },
+  textBtnGo: {
     fontSize: 18,
-    marginLeft: 5,
-    color: PalleteColors.primaryDark,
-  },
-  textInfo: {
-    fontSize: 25,
-    color: PalleteColors.primaryDark,
     fontWeight: 'bold',
-    marginBottom: 10,
+  },
+  info: {
+    color: PalleteColors.primaryDark,
+    fontSize: 18,
+    marginLeft: 10,
   },
 });

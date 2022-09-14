@@ -34,7 +34,7 @@ const PermissionsScreen = () => {
     {
       title: 'App Nombre',
       desc: 'Ea et eu enim fugiat sunt reprehenderit sunt aute quis tempor ipsum cupidatat et.',
-      img: require('../assets/Des.png'),
+      img: require('../assets/Points.png'),
     },
     {
       title: 'Permisos',
@@ -67,7 +67,7 @@ const PermissionsScreen = () => {
                     borderRadius: 5,
                   }
                 : {
-                    backgroundColor: PalleteColors.primaryLight,
+                    backgroundColor: PalleteColors.secundaryLight,
                     borderRadius: 5,
                   },
             ]}
@@ -81,7 +81,7 @@ const PermissionsScreen = () => {
                     borderRadius: 5,
                   }
                 : {
-                    backgroundColor: PalleteColors.primaryLight,
+                    backgroundColor: PalleteColors.secundaryLight,
                     borderRadius: 5,
                   },
             ]}
@@ -95,7 +95,7 @@ const PermissionsScreen = () => {
                     borderRadius: 5,
                   }
                 : {
-                    backgroundColor: PalleteColors.primaryLight,
+                    backgroundColor: PalleteColors.secundaryLight,
                     borderRadius: 5,
                   },
             ]}
@@ -127,7 +127,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'white',
+    backgroundColor: PalleteColors.primaryLight,
   },
   itemImg: {width: 350, height: 400, resizeMode: 'center'},
   itemTitle: {fontSize: 30, fontWeight: 'bold'},

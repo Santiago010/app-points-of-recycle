@@ -7,6 +7,9 @@ import LoadingScreen from '../screens/LoadingScreen';
 import PointsInMapScreen from '../screens/PointsInMapScreen';
 import {Points} from '../interfaces/AppInterfaces';
 import DetailsPointsScreen from '../screens/DetailsPointsScreen';
+import AnteRoom from '../screens/AnteRoomScreen';
+import SuggestionPointScreen from '../screens/SuggestionPointScreen';
+import MapUserLocationScreen from '../screens/MapUserLocationScreen';
 
 export type RootStackParams = {
   Map: undefined;
@@ -15,6 +18,9 @@ export type RootStackParams = {
     nameLocation: string;
   };
   DetailsPoint: Points;
+  AnteRoom: undefined;
+  SuggestionPoint: undefined;
+  MapUserLocation: undefined;
 };
 
 const Stack = createStackNavigator<RootStackParams>();
@@ -31,9 +37,18 @@ const StackNavigator = () => {
       screenOptions={{headerShown: false}}>
       {permissions.locationStatus === 'granted' ? (
         <>
+          <Stack.Screen name="AnteRoom" component={AnteRoom} />
           <Stack.Screen name="Map" component={MapScreen} />
+          <Stack.Screen
+            name="SuggestionPoint"
+            component={SuggestionPointScreen}
+          />
           <Stack.Screen name="PointsInMap" component={PointsInMapScreen} />
           <Stack.Screen name="DetailsPoint" component={DetailsPointsScreen} />
+          <Stack.Screen
+            name="MapUserLocation"
+            component={MapUserLocationScreen}
+          />
         </>
       ) : (
         <Stack.Screen name="Permissions" component={PermissionsScreen} />

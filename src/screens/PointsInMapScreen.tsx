@@ -2,6 +2,7 @@ import {StackScreenProps} from '@react-navigation/stack';
 import {collection, getDocs, query, where} from 'firebase/firestore';
 import React, {useEffect, useState} from 'react';
 import {ActivityIndicator, StyleSheet, Text, View} from 'react-native';
+import ButtonBack from '../components/ButtonBack';
 import Map from '../components/Map';
 import {db} from '../firebase';
 import {Points} from '../interfaces/AppInterfaces';
