@@ -8,3 +8,8 @@ export interface Points {
   telefono: string;
   web: string;
 }
+
+export interface Location {
+  latitude: number;
+  longitude: number;
+}
