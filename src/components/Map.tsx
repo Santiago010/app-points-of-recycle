@@ -1,37 +1,31 @@
 import {useNavigation} from '@react-navigation/native';
-import React, {useRef} from 'react';
+import React from 'react';
+import {Text} from 'react-native';
 import MapView, {Marker} from 'react-native-maps';
 import {Location, Points} from '../interfaces/AppInterfaces';
-import {useLocation} from '../hooks/useLocation';
-import {Text, TouchableOpacity} from 'react-native';
+import {PalleteColors} from '../themes/PaletteColors';
+import {Fab} from './Fab';
 
 interface Props {
   markets: Points[];
   location: Location;
+  changeLocation?: (coords: any) => void;
+  showFab: boolean;
+  useLocationCurrent?: () => void;
 }
-const Map = ({markets, location}: Props) => {
+const Map = ({
+  markets,
+  location,
+  changeLocation,
+  showFab,
+  useLocationCurrent,
+}: Props) => {
   const navigation = useNavigation();
-  const {getLocationCurrent} = useLocation();
-  const mapViewRef = useRef<MapView>();
-
-  const locationCenter = async () => {
-    const {latitude, longitude} = await getLocationCurrent();
-    mapViewRef.current?.animateCamera({
-      center: {
-        latitude: latitude,
-        longitude: longitude,
-      },
-    });
-    let geocoding = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=AIzaSyBi6a1rVILuICtZnx_sd2QTv3-ndTaEdfY`;
-    fetch(geocoding)
-      .then(res => res.json())
-      .then(data => console.log(data.results[0].formatted_address));
-  };
 
   return (
     <>
       <MapView
-        ref={el => (mapViewRef.current = el!)}
+        onPress={ev => changeLocation(ev.nativeEvent.coordinate)}
         showsUserLocation={true}
         style={{flex: 1}}
         initialRegion={{
@@ -53,9 +47,19 @@ const Map = ({markets, location}: Props) => {
           />
         ))}
       </MapView>
-      <TouchableOpacity onPress={locationCenter}>
-        <Text>obtener ubicacion</Text>
-      </TouchableOpacity>
+      {showFab && (
+        <Fab
+          onPress={useLocationCurrent}
+          backgroundColor={PalleteColors.primaryDark}
+          colorIcon={PalleteColors.primaryLight}
+          style={{
+            position: 'absolute',
+            bottom: 15,
+            right: 15,
+          }}>
+          <Text>Usar Mi Ubicación Actual</Text>
+        </Fab>
+      )}
     </>
   );
 };

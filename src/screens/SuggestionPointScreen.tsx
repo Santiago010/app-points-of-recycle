@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   Text,
@@ -13,9 +13,14 @@ import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 
 import {useForm} from '../hooks/useForm';
 import {useNavigation} from '@react-navigation/native';
+import {StackScreenProps} from '@react-navigation/stack';
+import {RootStackParams} from '../navigator/StackNavigator';
+interface Props extends StackScreenProps<RootStackParams, 'SuggestionPoint'> {}
 
-const SuggestionPointScreen = () => {
+const SuggestionPointScreen = ({route}: Props) => {
   const navigate = useNavigation();
+  const addressNewPoint = route.params.addressNewPoint;
+
   const [showContainerPhoto, setShowContainerPhoto] = useState(false);
   const {name, email, location, phone, web, address, onChange, form} = useForm({
     name: '',
@@ -59,6 +64,10 @@ const SuggestionPointScreen = () => {
   const sendSuggestion = () => {
     console.log(form);
   };
+
+  useEffect(() => {
+    onChange(addressNewPoint, 'address');
+  }, [route]);
 
   return (
     <View style={styles.container}>
@@ -153,7 +162,6 @@ const styles = StyleSheet.create({
     paddingTop: 20,
     paddingHorizontal: 20,
     backgroundColor: PalleteColors.primaryLight,
-    // justifyContent: 'center',
   },
   title: {
     fontSize: 20,

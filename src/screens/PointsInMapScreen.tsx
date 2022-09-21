@@ -2,7 +2,6 @@ import {StackScreenProps} from '@react-navigation/stack';
 import {collection, getDocs, query, where} from 'firebase/firestore';
 import React, {useEffect, useState} from 'react';
 import {ActivityIndicator, StyleSheet, Text, View} from 'react-native';
-import ButtonBack from '../components/ButtonBack';
 import Map from '../components/Map';
 import {db} from '../firebase';
 import {Points} from '../interfaces/AppInterfaces';
@@ -14,6 +13,7 @@ interface Props extends StackScreenProps<RootStackParams, 'PointsInMap'> {}
 const PointsInMapScreen = ({route}: Props) => {
   const [points, setPoints] = useState<Points[] | any[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  console.log(route.params);
   const nameLocation = route.params.nameLocation;
 
   useEffect(() => {
@@ -52,7 +52,14 @@ const PointsInMapScreen = ({route}: Props) => {
   return (
     <View style={styles.containerPrincipal}>
       <Text style={styles.textLocation}>Localidad de {nameLocation}</Text>
-      <Map markets={points} />
+      <Map
+        markets={points}
+        location={{
+          latitude: 4.712605519146334,
+          longitude: -74.08856037503709,
+        }}
+        showFab={false}
+      />
     </View>
   );
 };

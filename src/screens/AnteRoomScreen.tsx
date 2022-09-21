@@ -16,7 +16,11 @@ const AnteRoomScreen = () => {
           borderBottomStartRadius: 50,
           marginBottom: 10,
         }}
-        onPress={() => navigation.navigate('SuggestionPoint')}>
+        onPress={() =>
+          navigation.navigate('SuggestionPoint', {
+            addressNewPoint: '',
+          })
+        }>
         <Text style={styles.text}>Sugerir punto de recolección</Text>
         <Image
           style={styles.images}

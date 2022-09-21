@@ -19,7 +19,9 @@ export type RootStackParams = {
   };
   DetailsPoint: Points;
   AnteRoom: undefined;
-  SuggestionPoint: undefined;
+  SuggestionPoint: {
+    addressNewPoint: string;
+  };
   MapUserLocation: undefined;
 };
 
