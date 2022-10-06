@@ -22,13 +22,9 @@ const DetailsPointsScreen = ({route, navigation}: Props) => {
     <View style={styles.container}>
       <View style={styles.containerHeader}>
         <ButtonBack />
-        {/* <TouchableOpacity
-          style={{...styles.btnBack, top: top + 10}}
-          activeOpacity={0.8}
-          onPress={() => navigation.pop()}>
-          <Icon size={30} name="arrow-undo-outline" />
-        </TouchableOpacity> */}
-        <Text style={{...styles.titleName, top: top + 60}}>{point.nombre}</Text>
+        <Text style={{...styles.titleName, top: top + 60}}>
+          Nombre: {point.nombre}
+        </Text>
         <Image
           source={require('../assets/location.png')}
           style={styles.imagePoint}
@@ -71,9 +67,6 @@ const DetailsPointsScreen = ({route, navigation}: Props) => {
             <Text style={styles.info}>¡Ups! NO hay Telefono</Text>
           )}
         </View>
-        <TouchableOpacity style={styles.btnGo} activeOpacity={0.8}>
-          <Text style={styles.textBtnGo}>Ver Ruta</Text>
-        </TouchableOpacity>
       </View>
     </View>
   );
@@ -117,7 +110,7 @@ const styles = StyleSheet.create({
     flex: 1,
     marginHorizontal: 15,
     marginVertical: 15,
-    justifyContent: 'space-between',
+    justifyContent: 'space-evenly',
   },
   containerTextAndIco: {
     flexDirection: 'row',

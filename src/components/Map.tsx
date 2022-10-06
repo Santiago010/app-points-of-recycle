@@ -1,5 +1,5 @@
 import {useNavigation} from '@react-navigation/native';
-import React from 'react';
+import React, {useRef} from 'react';
 import {Text} from 'react-native';
 import MapView, {Marker} from 'react-native-maps';
 import {Location, Points} from '../interfaces/AppInterfaces';
@@ -21,10 +21,12 @@ const Map = ({
   useLocationCurrent,
 }: Props) => {
   const navigation = useNavigation();
+  const mapViewRef = useRef<MapView>();
 
   return (
     <>
       <MapView
+        ref={el => (mapViewRef.current = el!)}
         onPress={ev => changeLocation(ev.nativeEvent.coordinate)}
         showsUserLocation={true}
         style={{flex: 1}}

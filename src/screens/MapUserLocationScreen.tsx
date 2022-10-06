@@ -1,5 +1,4 @@
-import Geolocation from 'react-native-geolocation-service';
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {View, StyleSheet, Modal, Text, TouchableOpacity} from 'react-native';
 import Map from '../components/Map';
 import {useLocation} from '../hooks/useLocation';
@@ -17,7 +16,6 @@ const MapUserLocationScreen = () => {
   const [points, setPoints] = useState<Points[] | any[]>([]);
 
   const changeLocation = async (coords: Location) => {
-    console.log(coords);
     setPoints([
       {
         direccion: '',

@@ -28,17 +28,17 @@ const PermissionsScreen = () => {
   const items: CarouselItem[] = [
     {
       title: '¡Bienvenido!',
-      desc: 'Ea et eu enim fugiat sunt reprehenderit sunt aute quis tempor ipsum cupidatat et.',
+      desc: '¡Eyy! que buena onda, gracias por querer hacer de Bogotá una ciudad mas limpia.',
       img: require('../assets/Welcome.png'),
     },
     {
-      title: 'App Nombre',
-      desc: 'Ea et eu enim fugiat sunt reprehenderit sunt aute quis tempor ipsum cupidatat et.',
+      title: 'APP Nombre',
+      desc: 'En esta app podrás ver diferentes puntos de recolección que se encuentren en tu localidad, también si tienes conocimiento de otros puntos de recolección puedes hacernos una sugerencia ',
       img: require('../assets/Points.png'),
     },
     {
       title: 'Permisos',
-      desc: 'Ea et eu enim fugiat sunt reprehenderit sunt aute quis tempor ipsum cupidatat et.',
+      desc: 'Para poder hacer uso de la app danos permiso para acceder a tu ubicación ',
       img: require('../assets/Map.png'),
     },
   ];

@@ -7,18 +7,6 @@ import ListLocalities from '../components/ListLocalities';
 import {PalleteColors} from '../themes/PaletteColors';
 
 const MapScreen = () => {
-  // useEffect(() => {
-  //   cons();
-  // }, []);
-
-  // const cons = async () => {
-  //   console.log('hola');
-  //   const querySnapshot = await getDocs(collection(db, 'Puntos'));
-  //   querySnapshot.forEach(doc => {
-  //     console.log(doc.data());
-  //   });
-  // };
-
   return (
     <View style={styles.containerPrincipal}>
       <Text style={styles.title}>Escoge una localidad</Text>
@@ -40,6 +28,7 @@ const styles = StyleSheet.create({
     fontSize: 25,
     borderColor: PalleteColors.primaryDark,
     borderBottomWidth: 2,
-    padding: 2,
+    paddingVertical: 10,
+    paddingHorizontal: 5,
   },
 });

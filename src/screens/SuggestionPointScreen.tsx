@@ -5,23 +5,25 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
+  Modal,
 } from 'react-native';
 import {TextInput} from 'react-native-gesture-handler';
 import {PalleteColors} from '../themes/PaletteColors';
 import Icon from 'react-native-vector-icons/Ionicons';
-import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 
 import {useForm} from '../hooks/useForm';
 import {useNavigation} from '@react-navigation/native';
 import {StackScreenProps} from '@react-navigation/stack';
 import {RootStackParams} from '../navigator/StackNavigator';
+import {addDoc, collection} from 'firebase/firestore';
+import {db} from '../firebase';
 interface Props extends StackScreenProps<RootStackParams, 'SuggestionPoint'> {}
 
 const SuggestionPointScreen = ({route}: Props) => {
   const navigate = useNavigation();
   const addressNewPoint = route.params.addressNewPoint;
+  const [modalVisible, setModalVisible] = useState(false);
 
-  const [showContainerPhoto, setShowContainerPhoto] = useState(false);
   const {name, email, location, phone, web, address, onChange, form} = useForm({
     name: '',
     email: '',
@@ -30,47 +32,41 @@ const SuggestionPointScreen = ({route}: Props) => {
     web: '',
     address: '',
   });
-  const takePhoto = () => {
-    launchCamera(
-      {
-        mediaType: 'photo',
-        quality: 0.5,
-      },
-      resp => {
-        if (resp.didCancel) return;
-        console.log(resp.assets[0].uri);
-        // setTempUri(resp.assets[0].uri);
-        // uploadImage(resp, _id);
-      },
-    );
-  };
 
-  const takePhotoFromGallery = () => {
-    launchImageLibrary(
-      {
-        mediaType: 'photo',
-        quality: 0.5,
-      },
-      resp => {
-        if (resp.didCancel) return;
-
-        console.log(resp.assets[0].uri);
-        // setTempUri(resp.assets[0].uri);
-        // uploadImage(resp, _id);
-      },
-    );
-  };
-
-  const sendSuggestion = () => {
+  const sendSuggestion = async () => {
     console.log(form);
+    await addDoc(collection(db, 'sugerencias'), form);
+    setModalVisible(true);
   };
 
   useEffect(() => {
     onChange(addressNewPoint, 'address');
   }, [route]);
 
+  useEffect(() => {
+    setTimeout(() => {
+      setModalVisible(false);
+    }, 5000);
+  }, [modalVisible]);
+
   return (
     <View style={styles.container}>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          setModalVisible(!modalVisible);
+        }}>
+        <View style={styles.containerModal}>
+          <Text style={styles.titleModal}>
+            ¡EEEYYY! que buena onda ¡Gracias! por tu sugerencia.
+          </Text>
+          <Text style={styles.desModal}>
+            Estaremos evaluando tu sugerencia.
+          </Text>
+        </View>
+      </Modal>
       <Text style={styles.title}>
         Ingresa la siguiente información para sugerir un punto de recolección:
       </Text>
@@ -130,25 +126,6 @@ const SuggestionPointScreen = ({route}: Props) => {
             Enviar
           </Text>
         </TouchableOpacity>
-        <View style={styles.containerBtnsPhoto}>
-          <Text style={styles.titlePhoto}>Subir Foto</Text>
-          <TouchableOpacity style={styles.btnPhoto} onPress={takePhoto}>
-            <Icon
-              color={PalleteColors.primaryLight}
-              name="camera-outline"
-              size={30}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.btnPhoto}
-            onPress={takePhotoFromGallery}>
-            <Icon
-              color={PalleteColors.primaryLight}
-              name="image-outline"
-              size={30}
-            />
-          </TouchableOpacity>
-        </View>
       </ScrollView>
     </View>
   );
@@ -190,13 +167,13 @@ const styles = StyleSheet.create({
     backgroundColor: PalleteColors.primaryLight,
     borderRadius: 10,
     paddingHorizontal: 10,
-    color: PalleteColors.secundaryLight,
+    color: PalleteColors.primaryDark,
     fontSize: 18,
-    marginVertical: 10,
+    marginVertical: 15,
   },
   containerAddress: {
     flexDirection: 'row',
-    marginVertical: 5,
+    marginVertical: 10,
   },
   btnAddress: {
     backgroundColor: PalleteColors.primaryLight,
@@ -214,37 +191,36 @@ const styles = StyleSheet.create({
     backgroundColor: PalleteColors.primaryLight,
     borderRadius: 10,
     paddingHorizontal: 10,
-    color: PalleteColors.secundaryLight,
+    color: PalleteColors.primaryDark,
     fontSize: 18,
-  },
-  containerBtnsPhoto: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    flexWrap: 'wrap',
-  },
-  titlePhoto: {
-    fontSize: 18,
-    width: '100%',
-    textAlign: 'center',
-  },
-  btnPhoto: {
-    backgroundColor: PalleteColors.primaryDark,
-    marginVertical: 10,
-    marginHorizontal: 20,
-    padding: 20,
-    borderRadius: 30,
   },
   btnSend: {
     padding: 10,
     backgroundColor: PalleteColors.primaryDark,
     borderColor: PalleteColors.secundaryDark,
     borderWidth: 1,
-    marginVertical: 10,
+    marginVertical: 15,
     borderRadius: 10,
   },
   textSend: {
     fontSize: 18,
     fontWeight: 'bold',
+  },
+  containerModal: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(208,201,192,0.9)',
+  },
+  titleModal: {
+    color: PalleteColors.secundaryDark,
+    fontSize: 20,
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  desModal: {
+    fontSize: 18,
+    color: PalleteColors.primaryDark,
+    marginTop: 10,
   },
 });

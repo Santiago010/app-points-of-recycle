@@ -7,6 +7,7 @@ import {db} from '../firebase';
 import {Points} from '../interfaces/AppInterfaces';
 import {RootStackParams} from '../navigator/StackNavigator';
 import {PalleteColors} from '../themes/PaletteColors';
+import PointsEmptyScreen from './PointsEmptyScreen';
 
 interface Props extends StackScreenProps<RootStackParams, 'PointsInMap'> {}
 
@@ -37,9 +38,9 @@ const PointsInMapScreen = ({route}: Props) => {
     }
   };
 
-  useEffect(() => {
-    console.log(points);
-  }, [points]);
+  if (points.length === 0) {
+    return <PointsEmptyScreen />;
+  }
 
   if (isLoading) {
     return (

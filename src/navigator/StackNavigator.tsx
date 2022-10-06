@@ -23,6 +23,7 @@ export type RootStackParams = {
     addressNewPoint: string;
   };
   MapUserLocation: undefined;
+  SeeRoute: undefined;
 };
 
 const Stack = createStackNavigator<RootStackParams>();
