@@ -8,7 +8,7 @@ const PointsEmptyScreen = () => {
       <Image source={require('../assets/empty.png')} style={styles.itemImg} />
       <Text style={styles.text}>
         ¡Lo sentimos mucho! no encontramos puntos de recolección en esta
-        localidad.
+        localidad o no tienes acceso a internet
       </Text>
     </View>
   );

@@ -5,7 +5,6 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
-  Modal,
 } from 'react-native';
 import {TextInput} from 'react-native-gesture-handler';
 import {PalleteColors} from '../themes/PaletteColors';
@@ -17,12 +16,17 @@ import {StackScreenProps} from '@react-navigation/stack';
 import {RootStackParams} from '../navigator/StackNavigator';
 import {addDoc, collection} from 'firebase/firestore';
 import {db} from '../firebase';
+import ModalSuggestionSuccess from '../components/ModalSuggestionSuccess';
+import ModalErrorConnection from '../components/ModalErrorConnection';
+import {useNetInfo} from '@react-native-community/netinfo';
 interface Props extends StackScreenProps<RootStackParams, 'SuggestionPoint'> {}
 
 const SuggestionPointScreen = ({route}: Props) => {
+  const netInfo = useNetInfo();
   const navigate = useNavigation();
   const addressNewPoint = route.params.addressNewPoint;
   const [modalVisible, setModalVisible] = useState(false);
+  const [modalError, setModalError] = useState(false);
 
   const {name, email, location, phone, web, address, onChange, form} = useForm({
     name: '',
@@ -34,14 +38,27 @@ const SuggestionPointScreen = ({route}: Props) => {
   });
 
   const sendSuggestion = async () => {
-    console.log(form);
-    await addDoc(collection(db, 'sugerencias'), form);
-    setModalVisible(true);
+    if (netInfo.isConnected) {
+      await addDoc(collection(db, 'sugerencias'), form);
+      setModalVisible(true);
+    } else {
+      setModalError(true);
+    }
+
+    console.log(netInfo.isConnected);
+
+    // netInfo.isConnected;
   };
 
   useEffect(() => {
     onChange(addressNewPoint, 'address');
   }, [route]);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setModalError(false);
+    }, 5000);
+  }, [modalError]);
 
   useEffect(() => {
     setTimeout(() => {
@@ -51,22 +68,9 @@ const SuggestionPointScreen = ({route}: Props) => {
 
   return (
     <View style={styles.container}>
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => {
-          setModalVisible(!modalVisible);
-        }}>
-        <View style={styles.containerModal}>
-          <Text style={styles.titleModal}>
-            ¡EEEYYY! que buena onda ¡Gracias! por tu sugerencia.
-          </Text>
-          <Text style={styles.desModal}>
-            Estaremos evaluando tu sugerencia.
-          </Text>
-        </View>
-      </Modal>
+      <ModalErrorConnection modalVisible={modalError} />
+      <ModalSuggestionSuccess modalVisible={modalVisible} />
+
       <Text style={styles.title}>
         Ingresa la siguiente información para sugerir un punto de recolección:
       </Text>
@@ -205,22 +209,5 @@ const styles = StyleSheet.create({
   textSend: {
     fontSize: 18,
     fontWeight: 'bold',
-  },
-  containerModal: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(208,201,192,0.9)',
-  },
-  titleModal: {
-    color: PalleteColors.secundaryDark,
-    fontSize: 20,
-    fontWeight: 'bold',
-    textAlign: 'center',
-  },
-  desModal: {
-    fontSize: 18,
-    color: PalleteColors.primaryDark,
-    marginTop: 10,
   },
 });

@@ -159,8 +159,6 @@ const styles = StyleSheet.create({
   points: {
     height: 7,
     width: 7,
-    // borderRadius: 100,
-    // backgroundColor: PalleteColors.secundaryDark,
     margin: 5,
   },
 });

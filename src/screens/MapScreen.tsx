@@ -1,7 +1,5 @@
 import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
-// import {collection, getDocs, query, where} from 'firebase/firestore';
-// import {db} from '../firebase';
 
 import ListLocalities from '../components/ListLocalities';
 import {PalleteColors} from '../themes/PaletteColors';

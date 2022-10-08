@@ -13,8 +13,8 @@ interface Props extends StackScreenProps<RootStackParams, 'PointsInMap'> {}
 
 const PointsInMapScreen = ({route}: Props) => {
   const [points, setPoints] = useState<Points[] | any[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
-  console.log(route.params);
+  const [isLoading, setIsLoading] = useState(true);
+  const [showEmpty, setShowEmpty] = useState(false);
   const nameLocation = route.params.nameLocation;
 
   useEffect(() => {
@@ -28,6 +28,7 @@ const PointsInMapScreen = ({route}: Props) => {
         collection(db, 'Puntos'),
         where('localidad', '==', nameLocation),
       );
+
       const querySnapshot = await getDocs(q);
       querySnapshot.forEach(doc => {
         setPoints([...points, doc.data()]);
@@ -38,7 +39,7 @@ const PointsInMapScreen = ({route}: Props) => {
     }
   };
 
-  if (points.length === 0) {
+  if (isLoading === false && points.length === 0) {
     return <PointsEmptyScreen />;
   }
 
@@ -59,6 +60,7 @@ const PointsInMapScreen = ({route}: Props) => {
           latitude: 4.712605519146334,
           longitude: -74.08856037503709,
         }}
+        changeLocation={() => {}}
         showFab={false}
       />
     </View>
