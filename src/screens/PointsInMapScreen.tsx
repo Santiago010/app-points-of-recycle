@@ -14,7 +14,6 @@ interface Props extends StackScreenProps<RootStackParams, 'PointsInMap'> {}
 const PointsInMapScreen = ({route}: Props) => {
   const [points, setPoints] = useState<Points[] | any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [showEmpty, setShowEmpty] = useState(false);
   const nameLocation = route.params.nameLocation;
 
   useEffect(() => {
@@ -30,12 +29,14 @@ const PointsInMapScreen = ({route}: Props) => {
       );
 
       const querySnapshot = await getDocs(q);
+      let pointsReturn: any = [];
       querySnapshot.forEach(doc => {
-        setPoints([...points, doc.data()]);
+        pointsReturn.push(doc.data());
       });
+      setPoints(pointsReturn);
       setIsLoading(false);
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
   };
 

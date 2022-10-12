@@ -33,12 +33,12 @@ const PermissionsScreen = () => {
     },
     {
       title: 'APP Nombre',
-      desc: 'En esta app podrás ver diferentes puntos de recolección que se encuentren en tu localidad, también si tienes conocimiento de otros puntos de recolección puedes hacernos una sugerencia ',
+      desc: 'En esta app podrás ver diferentes puntos de recolección que se encuentren en tu localidad, también si tienes conocimiento de otros puntos de recolección puedes hacernos una sugerencia',
       img: require('../assets/Points.png'),
     },
     {
       title: 'Permisos',
-      desc: 'Para poder hacer uso de la app danos permiso para acceder a tu ubicación ',
+      desc: 'Para poder hacer uso de la app danos permiso para acceder a tu ubicación',
       img: require('../assets/Map.png'),
     },
   ];

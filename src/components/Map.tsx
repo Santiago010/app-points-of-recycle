@@ -33,21 +33,23 @@ const Map = ({
         initialRegion={{
           latitude: location.latitude,
           longitude: location.longitude,
-          latitudeDelta: 0.0922,
-          longitudeDelta: 0.0421,
+          latitudeDelta: 0.222,
+          longitudeDelta: 0.222,
         }}>
-        {markets.map((marker, index) => (
-          <Marker
-            key={index}
-            coordinate={{
-              latitude: Number(marker.latitud),
-              longitude: Number(marker.longitud),
-            }}
-            title={marker.Nombre}
-            description={marker.direccion}
-            onPress={() => navigation.navigate('DetailsPoint', marker)}
-          />
-        ))}
+        {markets.map((marker, index) => {
+          return (
+            <Marker
+              key={index}
+              coordinate={{
+                latitude: Number(marker.latitud),
+                longitude: Number(marker.longitud),
+              }}
+              title={marker.Nombre}
+              description={marker.direccion}
+              onPress={() => navigation.navigate('DetailsPoint', marker)}
+            />
+          );
+        })}
       </MapView>
       {showFab && (
         <Fab

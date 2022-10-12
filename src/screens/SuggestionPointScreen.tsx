@@ -5,12 +5,11 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
+  ActivityIndicator,
 } from 'react-native';
 import {TextInput} from 'react-native-gesture-handler';
 import {PalleteColors} from '../themes/PaletteColors';
 import Icon from 'react-native-vector-icons/Ionicons';
-
-import {useForm} from '../hooks/useForm';
 import {useNavigation} from '@react-navigation/native';
 import {StackScreenProps} from '@react-navigation/stack';
 import {RootStackParams} from '../navigator/StackNavigator';
@@ -19,6 +18,7 @@ import {db} from '../firebase';
 import ModalSuggestionSuccess from '../components/ModalSuggestionSuccess';
 import ModalErrorConnection from '../components/ModalErrorConnection';
 import {useNetInfo} from '@react-native-community/netinfo';
+import {useFormik} from 'formik';
 interface Props extends StackScreenProps<RootStackParams, 'SuggestionPoint'> {}
 
 const SuggestionPointScreen = ({route}: Props) => {
@@ -27,31 +27,60 @@ const SuggestionPointScreen = ({route}: Props) => {
   const addressNewPoint = route.params.addressNewPoint;
   const [modalVisible, setModalVisible] = useState(false);
   const [modalError, setModalError] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const {name, email, location, phone, web, address, onChange, form} = useForm({
-    name: '',
-    email: '',
-    location: '',
-    phone: '',
-    web: '',
-    address: '',
+  const {values, setFieldValue, handleSubmit, errors} = useFormik({
+    initialValues: {
+      name: '',
+      email: '',
+      phone: '',
+      web: '',
+      address: '',
+    },
+    onSubmit: async values => {
+      if (netInfo.isConnected) {
+        setIsLoading(true);
+        await addDoc(collection(db, 'sugerencias'), values);
+        setIsLoading(false);
+        setModalVisible(true);
+      } else {
+        setModalError(true);
+      }
+    },
+    validate: values => {
+      let webPattern =
+        /(?:https?):\/\/(\w+:?\w*)?(\S+)(:\d+)?(\/|\/([\w#!:.?+=&%!\-\/]))?/;
+      const errorsValues = {};
+      if (!values.name || values.name.length < 3) {
+        errorsValues.name = 'Nombre inválido';
+      }
+      if (
+        !values.email ||
+        !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)
+      ) {
+        errorsValues.email = 'Email inválido';
+      }
+      if (
+        !values.phone ||
+        values.phone.length < 10 ||
+        values.phone.length > 13
+      ) {
+        errorsValues.phone = 'Número de teléfono inválido';
+      }
+      if (!values.web || webPattern.test(values.web)) {
+        errorsValues.web = 'Dirección web inválida';
+      }
+      if (!values.address) {
+        errorsValues.address = 'Dirección inválida';
+      }
+
+      // console.log(errorsValues);
+      return errorsValues;
+    },
   });
 
-  const sendSuggestion = async () => {
-    if (netInfo.isConnected) {
-      await addDoc(collection(db, 'sugerencias'), form);
-      setModalVisible(true);
-    } else {
-      setModalError(true);
-    }
-
-    console.log(netInfo.isConnected);
-
-    // netInfo.isConnected;
-  };
-
   useEffect(() => {
-    onChange(addressNewPoint, 'address');
+    setFieldValue('address', addressNewPoint);
   }, [route]);
 
   useEffect(() => {
@@ -76,60 +105,70 @@ const SuggestionPointScreen = ({route}: Props) => {
       </Text>
       <ScrollView style={styles.containerScroll}>
         <TextInput
-          onChangeText={value => onChange(value, 'name')}
-          value={name}
+          onChangeText={value => setFieldValue('name', value)}
+          value={values.name}
           placeholder="Nombre..."
           style={styles.textInput}
         />
+        {errors.name && <Text style={styles.textErrors}>{errors.name}</Text>}
+
         <TextInput
-          onChangeText={value => onChange(value, 'email')}
-          value={email}
+          onChangeText={value => setFieldValue('email', value)}
+          value={values.email}
           placeholder="Email..."
           style={styles.textInput}
           keyboardType="email-address"
+          autoCapitalize="none"
         />
+        {errors.email && <Text style={styles.textErrors}>{errors.email}</Text>}
+
         <TextInput
-          onChangeText={value => onChange(value, 'location')}
-          value={location}
-          placeholder="Localidad..."
-          style={styles.textInput}
-        />
-        <TextInput
-          onChangeText={value => onChange(value, 'phone')}
-          value={phone}
-          placeholder="Telefono..."
+          onChangeText={value => setFieldValue('phone', value)}
+          value={values.phone}
+          placeholder="Teléfono..."
           style={styles.textInput}
           keyboardType="number-pad"
         />
+        {errors.phone && <Text style={styles.textErrors}>{errors.phone}</Text>}
+
         <TextInput
-          onChangeText={value => onChange(value, 'web')}
-          value={web}
+          onChangeText={value => setFieldValue('web', value)}
+          value={values.web}
           placeholder="Web..."
           style={styles.textInput}
           keyboardType="web-search"
+          autoCapitalize="none"
         />
-        <View style={styles.containerAddress}>
-          <TextInput
-            onChangeText={value => onChange(value, 'address')}
-            value={address}
-            placeholder="Dirección..."
-            style={styles.TextInputAddress}
-          />
+        {errors.web && <Text style={styles.textErrors}>{errors.web}</Text>}
+        <View>
           <TouchableOpacity
             style={styles.btnAddress}
             activeOpacity={0.8}
             onPress={() => navigate.navigate('MapUserLocation')}>
-            <Icon name="locate-outline" size={30} />
+            <Text style={styles.textBtnAdrress}>Poner Dirección</Text>
+            <Icon name="locate-outline" size={20} />
           </TouchableOpacity>
+          {errors.address && (
+            <Text style={styles.textErrors}>{errors.address}</Text>
+          )}
+          <TextInput
+            editable={false}
+            onChangeText={value => setFieldValue('address', value)}
+            value={values.address}
+            placeholder="Dirección..."
+            style={styles.TextInputAddress}
+          />
         </View>
+
         <TouchableOpacity
-          onPress={sendSuggestion}
+          onPress={handleSubmit}
           style={styles.btnSend}
           activeOpacity={0.8}>
-          <Text style={styles.textSend} onPress={sendSuggestion}>
-            Enviar
-          </Text>
+          <Text style={styles.textSend}>Enviar</Text>
         </TouchableOpacity>
+        {isLoading && (
+          <ActivityIndicator size="large" color={PalleteColors.primaryDark} />
+        )}
       </ScrollView>
     </View>
   );
@@ -173,10 +212,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     color: PalleteColors.primaryDark,
     fontSize: 18,
-    marginVertical: 15,
-  },
-  containerAddress: {
-    flexDirection: 'row',
     marginVertical: 10,
   },
   btnAddress: {
@@ -187,27 +222,40 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: 10,
+    paddingVertical: 10,
+    marginVertical: 10,
+    flexDirection: 'row',
+  },
+  textBtnAdrress: {
+    fontSize: 18,
   },
   TextInputAddress: {
-    width: '85%',
     borderColor: PalleteColors.secundaryDark,
     borderWidth: 1,
     backgroundColor: PalleteColors.primaryLight,
     borderRadius: 10,
     paddingHorizontal: 10,
-    color: PalleteColors.primaryDark,
+    color: PalleteColors.secundaryDark,
     fontSize: 18,
+    marginVertical: 10,
   },
   btnSend: {
     padding: 10,
     backgroundColor: PalleteColors.primaryDark,
     borderColor: PalleteColors.secundaryDark,
     borderWidth: 1,
-    marginVertical: 15,
+    marginVertical: 10,
     borderRadius: 10,
   },
   textSend: {
     fontSize: 18,
     fontWeight: 'bold',
+    textAlign: 'center',
+    color: PalleteColors.primaryLight,
+  },
+  textErrors: {
+    fontSize: 16,
+    marginHorizontal: 8,
+    color: PalleteColors.secundaryDark,
   },
 });

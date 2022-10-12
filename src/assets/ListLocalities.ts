@@ -3,7 +3,7 @@ export interface Localities {
   numberLocation: number;
 }
 
-export const localities = [
+export const localities: Localities[] = [
   {
     name: 'Usaquén',
     numberLocation: 1,

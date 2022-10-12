@@ -6,14 +6,11 @@ import {
   ViewStyle,
   TouchableOpacity,
 } from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
 
 interface Props {
-  iconName: string;
   onPress: () => void;
   style?: StyleProp<ViewStyle>;
   backgroundColor: string;
-  colorIcon: string;
   children: JSX.Element;
 }
 
@@ -38,8 +35,6 @@ export const Fab = ({
 const styles = StyleSheet.create({
   blackButton: {
     zIndex: 9999,
-    // height: 50,
-    // width: 50,
     padding: 10,
     borderRadius: 100,
     justifyContent: 'center',
