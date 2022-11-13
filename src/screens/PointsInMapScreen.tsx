@@ -21,22 +21,37 @@ const PointsInMapScreen = ({route}: Props) => {
   }, []);
 
   const searchPoints = async () => {
-    try {
-      setIsLoading(true);
-      const q = query(
-        collection(db, 'Puntos'),
-        where('localidad', '==', nameLocation),
-      );
+    let pointsReturn: any = [];
+    if (nameLocation === 'Ver todos') {
+      try {
+        setIsLoading(true);
+        const querySnapshot = await getDocs(collection(db, 'Puntos'));
+        querySnapshot.forEach(doc => {
+          pointsReturn.push(doc.data());
+        });
+        setPoints(pointsReturn);
+        setIsLoading(false);
+      } catch (error) {
+        console.log(error);
+      }
+    } else {
+      try {
+        setIsLoading(true);
+        const q = query(
+          collection(db, 'Puntos'),
+          where('localidad', '==', nameLocation),
+        );
 
-      const querySnapshot = await getDocs(q);
-      let pointsReturn: any = [];
-      querySnapshot.forEach(doc => {
-        pointsReturn.push(doc.data());
-      });
-      setPoints(pointsReturn);
-      setIsLoading(false);
-    } catch (error) {
-      // console.log(error);
+        const querySnapshot = await getDocs(q);
+
+        querySnapshot.forEach(doc => {
+          pointsReturn.push(doc.data());
+        });
+        setPoints(pointsReturn);
+        setIsLoading(false);
+      } catch (error) {
+        // console.log(error);
+      }
     }
   };
 
@@ -54,7 +69,11 @@ const PointsInMapScreen = ({route}: Props) => {
 
   return (
     <View style={styles.containerPrincipal}>
-      <Text style={styles.textLocation}>Localidad de {nameLocation}</Text>
+      <Text style={styles.textLocation}>
+        {nameLocation === 'Ver todos'
+          ? 'Todos los puntos'
+          : `Localidad ${nameLocation}`}
+      </Text>
       <Map
         markets={points}
         location={{

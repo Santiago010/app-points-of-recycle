@@ -6,8 +6,8 @@ import {
   ScrollView,
   TouchableOpacity,
   ActivityIndicator,
+  TextInput,
 } from 'react-native';
-import {TextInput} from 'react-native-gesture-handler';
 import {PalleteColors} from '../themes/PaletteColors';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {useNavigation} from '@react-navigation/native';
@@ -67,14 +67,10 @@ const SuggestionPointScreen = ({route}: Props) => {
       ) {
         errorsValues.phone = 'Número de teléfono inválido';
       }
-      if (!values.web || webPattern.test(values.web)) {
-        errorsValues.web = 'Dirección web inválida';
-      }
       if (!values.address) {
         errorsValues.address = 'Dirección inválida';
       }
 
-      // console.log(errorsValues);
       return errorsValues;
     },
   });
@@ -160,15 +156,15 @@ const SuggestionPointScreen = ({route}: Props) => {
           />
         </View>
 
+        {isLoading && (
+          <ActivityIndicator size="large" color={PalleteColors.primaryDark} />
+        )}
         <TouchableOpacity
           onPress={handleSubmit}
           style={styles.btnSend}
           activeOpacity={0.8}>
           <Text style={styles.textSend}>Enviar</Text>
         </TouchableOpacity>
-        {isLoading && (
-          <ActivityIndicator size="large" color={PalleteColors.primaryDark} />
-        )}
       </ScrollView>
     </View>
   );

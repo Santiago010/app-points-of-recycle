@@ -28,17 +28,17 @@ const PermissionsScreen = () => {
   const items: CarouselItem[] = [
     {
       title: '¡Bienvenido!',
-      desc: '¡Eyy! que buena onda, gracias por querer hacer de Bogotá una ciudad mas limpia.',
+      desc: '¡Eyy! buena onda, gracias por querer hacer de Bogotá una ciudad mas limpia.',
       img: require('../assets/Welcome.png'),
     },
     {
-      title: 'APP Nombre',
-      desc: 'En esta app podrás ver diferentes puntos de recolección que se encuentren en tu localidad, también si tienes conocimiento de otros puntos de recolección puedes hacernos una sugerencia',
+      title: 'Eco Points',
+      desc: 'En esta App podrás ver diferentes puntos de recolección que se encuentren en tu Localidad, también si tienes conocimiento de otros puntos de recolección puedes hacernos una sugerencia',
       img: require('../assets/Points.png'),
     },
     {
       title: 'Permisos',
-      desc: 'Para poder hacer uso de la app danos permiso para acceder a tu ubicación',
+      desc: 'Para poder hacer uso de la Aapp necesitamos permiso para acceder a tu ubicación',
       img: require('../assets/Map.png'),
     },
   ];
@@ -130,8 +130,17 @@ const styles = StyleSheet.create({
     backgroundColor: PalleteColors.primaryLight,
   },
   itemImg: {width: 350, height: 400, resizeMode: 'center'},
-  itemTitle: {fontSize: 30, fontWeight: 'bold'},
-  itemDes: {fontSize: 16, marginVertical: 15},
+  itemTitle: {
+    fontSize: 35,
+    fontWeight: 'bold',
+    color: PalleteColors.secundaryDark,
+  },
+  itemDes: {
+    fontSize: 25,
+    marginVertical: 15,
+    color: PalleteColors.primaryDark,
+    textAlign: 'center',
+  },
   buttonPermission: {
     flexDirection: 'row',
     alignItems: 'center',

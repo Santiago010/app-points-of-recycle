@@ -51,10 +51,10 @@ const DetailsPointsScreen = ({route}: Props) => {
           />
           {point.web ? (
             <TouchableNativeFeedback onPress={() => Linking.openURL(point.web)}>
-              <Text style={styles.info}>{point.web}</Text>
+              <Text style={styles.info}>{point.web.substring(0, 60)}</Text>
             </TouchableNativeFeedback>
           ) : (
-            <Text style={styles.info}>¡Ups! NO hay página web</Text>
+            <Text style={styles.info}>¡Lo Sentimos! No hay página web</Text>
           )}
         </View>
         <View style={styles.containerTextAndIco}>
@@ -66,7 +66,7 @@ const DetailsPointsScreen = ({route}: Props) => {
           {point.direccion ? (
             <Text style={styles.info}> {point.direccion}</Text>
           ) : (
-            <Text>¡Ups! NO hay dirección</Text>
+            <Text>¡Lo Sentimos! No hay dirección</Text>
           )}
         </View>
         <View style={styles.containerTextAndIco}>
@@ -81,7 +81,7 @@ const DetailsPointsScreen = ({route}: Props) => {
               <Text style={styles.info}>{point.telefono}</Text>
             </TouchableNativeFeedback>
           ) : (
-            <Text style={styles.info}>¡Ups! NO hay Telefono</Text>
+            <Text style={styles.info}>¡Lo Sentimos! No hay Telefono</Text>
           )}
         </View>
         <View style={styles.containerTextAndIco}>
@@ -96,7 +96,7 @@ const DetailsPointsScreen = ({route}: Props) => {
               <Text style={styles.info}>{point.email}</Text>
             </TouchableNativeFeedback>
           ) : (
-            <Text style={styles.info}>¡Ups! NO hay Email</Text>
+            <Text style={styles.info}>¡Lo Sentimos! No hay Email</Text>
           )}
         </View>
         <TouchableOpacity

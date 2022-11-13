@@ -5,6 +5,10 @@ export interface Localities {
 
 export const localities: Localities[] = [
   {
+    name: 'Ver todos',
+    numberLocation: 0,
+  },
+  {
     name: 'Usaquén',
     numberLocation: 1,
   },
